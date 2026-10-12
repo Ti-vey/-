@@ -1,0 +1,26 @@
+# ==================== 构建产物 ====================
+backend/target/
+frontend/node_modules/
+frontend/dist/
+
+# ==================== 本地敏感配置 ====================
+# 数据库密码、JWT 密钥等真实值只放在本地文件里，不提交
+**/application-local.yml
+**/application-local.properties
+.env
+.env.local
+
+# ==================== 运行日志与进程文件 ====================
+*.log
+*.pid
+
+# ==================== IDE ====================
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# ==================== 系统文件 ====================
+Thumbs.db
+Desktop.ini
+~$*

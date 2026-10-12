@@ -1,0 +1,20 @@
+# =====================================================================
+# 本地配置模板
+#
+# 使用方法：把本文件复制为同目录下的 application-local.yml，然后填入自己的真实值。
+# application-local.yml 已在 .gitignore 中被排除，不会提交到仓库，
+# 因此数据库密码与 JWT 密钥不会出现在公开代码里。
+# =====================================================================
+
+spring:
+  datasource:
+    # 数据库地址，按自己的环境修改
+    url: jdbc:mysql://localhost:3306/warehouse_db?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: root
+    # 填写你自己的数据库密码
+    password: 你的数据库密码
+
+warehouse:
+  jwt:
+    # 随便一串 32 位以上的随机字符串即可，不要和示例相同
+    secret: 请替换为你自己的随机密钥

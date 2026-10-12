@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: warehouse-system
+  # 敏感配置（数据库账号密码、JWT 密钥）不写在仓库里，单独放在 application-local.yml。
+  # 首次运行请先复制 application-local.yml.example 为 application-local.yml 并填写自己的值。
+  config:
+    import: classpath:application-local.yml
+  # 数据源配置：账号密码从环境变量或 application-local.yml 注入
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc:mysql://localhost:3306/warehouse_db?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.warehouse.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      # 全局逻辑删除：deleted=0 未删除，deleted=1 已删除
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 业务自定义配置
+warehouse:
+  jwt:
+    # 生成 token 的密钥，从环境变量或 application-local.yml 注入
+    secret: ${JWT_SECRET}
+    # token 有效期（小时）
+    expire-hours: 12

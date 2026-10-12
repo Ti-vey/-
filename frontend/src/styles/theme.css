@@ -1,0 +1,527 @@
+/* ============================================================
+   设计令牌层（minimalist-ui 规范）
+
+   在 index.css 之后引入，集中定义暖调单色体系与低饱和点缀色，
+   并通过覆盖 Element Plus 的 CSS 变量让全站控件统一风格。
+
+   规范要点：
+   - 画布用暖骨白，卡片纯白，结构边框统一 1px #EAEAEA
+   - 正文不使用纯黑，统一 #2F3437，次要文字 #787774
+   - 不使用渐变与重阴影，阴影不超过 0.04 不透明度
+   - 颜色是稀缺资源，仅用于语义标签
+   ============================================================ */
+
+:root {
+  /* —— 画布与面 —— */
+  --ui-canvas: #F7F6F3;
+  --ui-surface: #FFFFFF;
+  --ui-surface-alt: #FBFBFA;
+  --ui-border: #EAEAEA;
+  --ui-border-strong: #E2E1DD;
+
+  /* —— 文字层级 —— */
+  --ui-text-strong: #111111;
+  --ui-text: #2F3437;
+  --ui-text-muted: #787774;
+
+  /* —— 低饱和点缀色（仅用于标签与状态） —— */
+  --ui-red-bg: #FDEBEC;
+  --ui-red-fg: #9F2F2D;
+  --ui-blue-bg: #E1F3FE;
+  --ui-blue-fg: #1F6C9F;
+  --ui-green-bg: #EDF3EC;
+  --ui-green-fg: #346538;
+  --ui-yellow-bg: #FBF3DB;
+  --ui-yellow-fg: #956400;
+
+  --ui-radius-card: 12px;
+  --ui-radius-control: 6px;
+
+  /* 字体：避开 Inter / Roboto / Open Sans，使用系统原生无衬线 */
+  --ui-font: 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --ui-font-mono: 'SF Mono', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+
+  /* ================= Element Plus 变量覆盖 ================= */
+  --el-font-family: var(--ui-font);
+
+  --el-text-color-primary: var(--ui-text);
+  --el-text-color-regular: #4A4F52;
+  --el-text-color-secondary: var(--ui-text-muted);
+  --el-text-color-placeholder: #A8A5A0;
+
+  --el-border-color: var(--ui-border);
+  --el-border-color-light: #EFEEEC;
+  --el-border-color-lighter: #F3F2EF;
+  --el-border-color-extra-light: #F7F6F3;
+
+  --el-fill-color-blank: #FFFFFF;
+  --el-fill-color-light: #F7F6F3;
+  --el-bg-color: #FFFFFF;
+  --el-bg-color-page: var(--ui-canvas);
+
+  --el-border-radius-base: var(--ui-radius-control);
+  --el-border-radius-small: 4px;
+
+  /* 阴影压到几乎不可见 */
+  --el-box-shadow-lighter: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --el-box-shadow-light: 0 1px 3px rgba(0, 0, 0, 0.03);
+  --el-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --el-box-shadow-dark: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  /* 主色改为炭黑：按钮、链接、选中态统一走单色 */
+  --el-color-primary: #111111;
+  --el-color-primary-light-3: #3A3A3A;
+  --el-color-primary-light-5: #6B6B6B;
+  --el-color-primary-light-7: #A3A3A3;
+  --el-color-primary-light-8: #C9C9C9;
+  --el-color-primary-light-9: #F0EFEC;
+  --el-color-primary-dark-2: #000000;
+
+  /* 语义色改为低饱和暖色，避免刺眼的默认红绿黄 */
+  --el-color-success: #346538;
+  --el-color-success-light-3: #4F7F53;
+  --el-color-success-light-5: #86A989;
+  --el-color-success-light-7: #BDD2BE;
+  --el-color-success-light-8: #D9E6D9;
+  --el-color-success-light-9: #EDF3EC;
+  --el-color-success-dark-2: #274A2A;
+
+  --el-color-danger: #9F2F2D;
+  --el-color-danger-light-3: #B55B59;
+  --el-color-danger-light-5: #CB8C8A;
+  --el-color-danger-light-7: #E0BDBC;
+  --el-color-danger-light-8: #EAD5D4;
+  --el-color-danger-light-9: #FDEBEC;
+  --el-color-danger-dark-2: #7A2321;
+
+  --el-color-error: #9F2F2D;
+  --el-color-error-light-9: #FDEBEC;
+
+  --el-color-warning: #956400;
+  --el-color-warning-light-3: #B08A3D;
+  --el-color-warning-light-5: #C8AB73;
+  --el-color-warning-light-7: #E0CCAA;
+  --el-color-warning-light-8: #EBDFC9;
+  --el-color-warning-light-9: #FBF3DB;
+  --el-color-warning-dark-2: #714B00;
+
+  --el-color-info: #787774;
+  --el-color-info-light-3: #96958F;
+  --el-color-info-light-5: #B4B3AC;
+  --el-color-info-light-7: #D0CFC9;
+  --el-color-info-light-8: #E2E1DD;
+  --el-color-info-light-9: #F2F1EF;
+  --el-color-info-dark-2: #5C5B58;
+}
+
+/* ================= 基础排版 ================= */
+body {
+  font-family: var(--ui-font);
+  color: var(--ui-text);
+  background-color: var(--ui-canvas);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 数字与编号使用等宽字体，形成编辑式排版对比 */
+.mono,
+.stat-card .value,
+.el-table .cell .mono {
+  font-family: var(--ui-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ================= 容器类 ================= */
+.search-bar,
+.table-card,
+.stat-card,
+.chart-card {
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  box-shadow: none;
+}
+
+.search-bar {
+  padding: 20px 24px;
+}
+
+.table-card,
+.chart-card {
+  padding: 24px;
+}
+
+.stat-card {
+  position: relative;
+  padding: 24px;
+  transition: box-shadow 200ms ease, border-color 200ms ease, transform 160ms ease;
+}
+
+.stat-card:hover,
+.chart-card:hover {
+  border-color: var(--ui-border-strong);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* 指标卡可点击跳转：用整块区域作为链接，保证键盘可访问 */
+.stat-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+
+.stat-link:hover .stat-card {
+  border-color: var(--ui-border-strong);
+  transform: translateY(-1px);
+}
+
+.stat-link:focus-visible .stat-card {
+  border-color: var(--ui-text-strong);
+}
+
+/* 右上角箭头作为跳转暗示：静息时极淡，悬停时变深并轻微位移 */
+.stat-arrow {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 14px;
+  color: #D6D4CF;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.stat-link:hover .stat-arrow {
+  color: var(--ui-text-muted);
+  transform: translate(2px, -2px);
+}
+
+.stat-card .label {
+  color: var(--ui-text-muted);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.stat-card .value {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ui-text-strong);
+}
+
+.table-toolbar .title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ui-text-strong);
+}
+
+.chart-card .card-header {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ui-text-strong);
+}
+
+.page-container {
+  padding: 24px;
+}
+
+/* ================= Element Plus 控件微调 ================= */
+/* 按钮：直角感更强，无阴影，按下时轻微缩放 */
+.el-button {
+  border-radius: var(--ui-radius-control);
+  box-shadow: none;
+  transition: background-color 160ms ease, transform 120ms ease;
+}
+
+.el-button:not(.is-disabled):active {
+  transform: scale(0.98);
+}
+
+.el-button--primary {
+  --el-button-bg-color: #111111;
+  --el-button-border-color: #111111;
+  --el-button-hover-bg-color: #333333;
+  --el-button-hover-border-color: #333333;
+  --el-button-active-bg-color: #000000;
+  --el-button-active-border-color: #000000;
+}
+
+/* 输入类控件：1px 细边框，聚焦时描边转炭黑 */
+.el-input,
+.el-textarea,
+.el-select,
+.el-date-editor,
+.el-input-number {
+  --el-input-border-color: var(--ui-border);
+  --el-input-hover-border-color: var(--ui-border-strong);
+  --el-input-focus-border-color: #111111;
+  --el-input-border-radius: var(--ui-radius-control);
+}
+
+/* 表格：表头改用暖白底，分隔线统一 */
+.el-table {
+  --el-table-border-color: var(--ui-border);
+  --el-table-header-bg-color: var(--ui-surface-alt);
+  --el-table-header-text-color: var(--ui-text);
+  --el-table-row-hover-bg-color: #FAFAF8;
+  --el-table-text-color: var(--ui-text);
+}
+
+.el-table th.el-table__cell {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* 标签：药丸形 + 低饱和底色（规范中唯一允许的圆角例外） */
+.el-tag {
+  border-radius: 9999px;
+  border: none;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  padding: 0 10px;
+}
+
+/* 弹窗：收敛阴影与圆角 */
+.el-dialog {
+  border-radius: var(--ui-radius-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--ui-border);
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid var(--ui-border);
+  margin-right: 0;
+  padding-bottom: 16px;
+}
+
+.el-dialog__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ui-text-strong);
+}
+
+/* 下拉、气泡等浮层统一细边框 */
+.el-popper.is-light {
+  border: 1px solid var(--ui-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.el-card {
+  border-radius: var(--ui-radius-card);
+  border: 1px solid var(--ui-border);
+  box-shadow: none;
+}
+
+/* 分割线：只用 1px 细线做结构分隔 */
+.el-divider {
+  border-color: var(--ui-border);
+}
+
+/* 进度条：轨道与填充都收敛 */
+.el-progress-bar__outer {
+  background-color: #F0EFEC;
+}
+
+/* ================= 入场动效 ================= */
+@keyframes ui-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ui-rise {
+  animation: ui-rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--ui-index, 0) * 80ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-rise {
+    animation: none;
+  }
+
+  .el-button:not(.is-disabled):active {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   表格与数据呈现
+   数据密集型界面靠「细线 + 留白 + 数字对齐」建立秩序，
+   而不是靠底色和线框堆叠
+   ============================================================ */
+.el-table {
+  font-size: 13px;
+  --el-table-border-color: var(--ui-border);
+  /* 斑马纹压到接近不可见，只作为长表格的弱引导 */
+  --el-table-fill-color-lighter: #FAFAF9;
+  --el-table-header-text-color: var(--ui-text-strong);
+}
+
+.el-table th.el-table__cell {
+  padding: 12px 0;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.el-table td.el-table__cell {
+  padding: 11px 0;
+}
+
+.el-table .cell {
+  padding: 0 12px;
+  line-height: 1.5;
+}
+
+.el-table__inner-wrapper::before {
+  background-color: var(--ui-border);
+}
+
+/* 数值列统一等宽字体与表格数字，保证小数点纵向对齐 */
+.el-table td.is-right .cell,
+.el-table td .numeric .cell,
+.numeric {
+  font-family: var(--ui-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.el-table__empty-text {
+  font-size: 13px;
+  color: var(--ui-text-muted);
+}
+
+/* 表格上方的计数说明文字 */
+.table-toolbar .meta,
+.table-card .meta {
+  font-family: var(--ui-font-mono);
+  font-size: 12px;
+  color: var(--ui-text-muted);
+}
+
+/* 计数说明与操作按钮同排，形成「说明 + 动作」的右侧结构 */
+.table-toolbar .toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ============================================================
+   控件细节
+   ============================================================ */
+
+/* 分页：弱化边框与底色，只保留当前页的字重强调 */
+.el-pagination {
+  font-family: var(--ui-font-mono);
+  font-size: 12px;
+  --el-pagination-button-bg-color: transparent;
+  --el-pagination-hover-color: var(--ui-text-strong);
+}
+
+.el-pagination .el-pager li {
+  border-radius: 4px;
+  font-weight: 400;
+  color: var(--ui-text-muted);
+}
+
+.el-pagination .el-pager li.is-active {
+  font-weight: 600;
+  color: var(--ui-text-strong);
+}
+
+.el-pagination button {
+  color: var(--ui-text-muted);
+}
+
+/* 弹窗：内容与按钮区用 1px 细线分隔，而不是靠阴影 */
+.el-dialog__body {
+  padding-top: 20px;
+}
+
+.el-dialog__footer {
+  padding-top: 16px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.el-dialog .el-form-item {
+  margin-bottom: 20px;
+}
+
+/* 分割线标题：左右文字用弱化的小号字 */
+.el-divider__text {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ui-text-muted);
+  background-color: var(--ui-surface);
+}
+
+/* 提示条：细边框 + 大圆角，去掉默认的重底色 */
+.el-alert {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-card);
+  padding: 14px 18px;
+}
+
+.el-alert--success.is-light {
+  background-color: var(--ui-green-bg);
+  border-color: #D9E6D9;
+}
+
+.el-alert--warning.is-light {
+  background-color: var(--ui-yellow-bg);
+  border-color: #EBDFC9;
+}
+
+.el-alert--error.is-light {
+  background-color: var(--ui-red-bg);
+  border-color: #EAD5D4;
+}
+
+.el-alert__title {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* 文字按钮与链接：统一到炭黑，避免出现蓝色链接 */
+.el-link.el-link--primary {
+  color: var(--ui-text-strong);
+  font-weight: 500;
+}
+
+.el-link.el-link--primary:hover {
+  color: var(--ui-text-muted);
+}
+
+/* 下拉菜单与选择项 */
+.el-dropdown-menu__item {
+  font-size: 13px;
+}
+
+.el-select-dropdown__item.is-selected {
+  font-weight: 600;
+  color: var(--ui-text-strong);
+}
+
+/* 主内容区滚动条：细而中性 */
+.main::-webkit-scrollbar,
+.aside::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.main::-webkit-scrollbar-thumb,
+.aside::-webkit-scrollbar-thumb {
+  background: #DCDAD5;
+  border-radius: 4px;
+}
+
+.main::-webkit-scrollbar-track,
+.aside::-webkit-scrollbar-track {
+  background: transparent;
+}

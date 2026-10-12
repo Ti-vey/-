@@ -1,0 +1,184 @@
+/* 全局样式 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Microsoft YaHei', 'PingFang SC', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #303133;
+  background-color: #f5f7fa;
+}
+
+/* 页面通用容器 */
+.page-container {
+  padding: 16px;
+}
+
+/* 查询条件区域 */
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+/* 表格区域 */
+.table-card {
+  padding: 16px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.table-toolbar .title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.pagination-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.stat-card {
+  padding: 18px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.stat-card .label {
+  color: #909399;
+  font-size: 13px;
+}
+
+.stat-card .value {
+  margin-top: 8px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #303133;
+}
+
+.chart-card {
+  padding: 16px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.chart-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.chart-card .card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dialog-footer {
+  text-align: right;
+}
+
+/* ==================== 打印样式 ====================
+   打印单据时隐藏页面其余内容，只输出 .print-sheet 区域 */
+.print-sheet {
+  display: none;
+}
+
+@media print {
+  /* 隐藏应用主体与可能打开的弹层，只输出打印区域 */
+  #app {
+    display: none !important;
+  }
+
+  body > .el-overlay,
+  body > .el-overlay-dialog {
+    display: none !important;
+  }
+
+  .print-sheet {
+    display: block !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: #000;
+    font-size: 12px;
+    font-family: 'SimSun', 'Microsoft YaHei', serif;
+  }
+
+  .print-sheet .print-title {
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 6px;
+  }
+
+  .print-sheet table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .print-sheet th,
+  .print-sheet td {
+    padding: 6px 8px;
+    border: 1px solid #000;
+    text-align: left;
+  }
+
+  .print-sheet thead th {
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .print-sheet .print-head td {
+    border: none;
+    padding: 4px 0;
+  }
+
+  .print-sheet .text-right {
+    text-align: right;
+  }
+
+  .print-sheet .text-center {
+    text-align: center;
+  }
+
+  .print-sheet .print-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+  }
+
+  .print-sheet .print-remark {
+    margin-top: 12px;
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+}
