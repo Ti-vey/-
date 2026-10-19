@@ -50,9 +50,9 @@ project/
 
 ## 四、启动步骤
 
-### 0. 配置数据库连接（首次运行必做）
+### 0. 配置数据库连接
 
-为了不把真实密码提交到代码仓库，数据库账号密码与 JWT 密钥都放在本地配置文件里，仓库中只有模板：
+
 
 1. 把 `backend/src/main/resources/application-local.yml.example` 复制为同目录下的 `application-local.yml`
 2. 打开它，填入自己的数据库密码（用户名、地址按需修改）
@@ -120,42 +120,12 @@ npm run dev
 | 移动加权平均成本 | 入库时按「原有库存金额 + 本次入库金额 ÷ 入库后总数量」更新成本 | `BizStockServiceImpl.increaseStock()` |
 | 单据状态机 | 草稿 → 待审核 → 已过账/已驳回，非法流转直接拦截 | 各单据 XxxServiceImpl.audit() |
 
-## 七、注意事项
 
-**1. 本机 3306 端口被两个 MySQL 实例同时占用**
+## 七、同类系统对比与设计借鉴
 
-系统中同时运行着 `MySQL57`（C:\ProgramData\MySQL）和禅道自带的 XAMPP MySQL（E:\chanda0111\chandao\xampp\mysql），两者都监听 3306 端口。JDBC 通过 `localhost` 解析到 IPv4 时会连到禅道那个实例并报 `Access denied`，因此 `application.yml` 中数据源地址显式使用了 IPv6 回环：
 
-```yaml
-url: jdbc:mysql://[::1]:3306/warehouse_db?...
-```
+**本系统优秀的地方**
 
-如果你的电脑只有一个 MySQL 实例，把 `[::1]` 改回 `localhost` 即可。
-
-**2. 数据库账号密码**
-
-真实的数据库密码与 JWT 密钥保存在 `backend/src/main/resources/application-local.yml` 中，该文件已被 `.gitignore` 排除，不会进入仓库。首次克隆项目后请复制 `application-local.yml.example` 并填写自己的值，否则后端启动时会提示缺少该配置文件。
-
-**3. 关闭服务**
-
-后端与前端分别通过 `app.pid`、`vite.pid` 记录了进程号，可用 `Stop-Process -Id <pid>` 关闭。
-
-## 八、同类系统对比与设计借鉴
-
-设计阶段参考了开源项目 [若依 WMS（zccbbg/wms-ruoyi，MIT 协议）](https://github.com/zccbbg/wms-ruoyi) 的领域建模思路，取其长处、避开其不足，可作为论文「国内外研究现状」一节的对比素材。
-
-**借鉴的地方**
-
-| 借鉴点 | 在本系统中的落地 |
-| --- | --- |
-| 单据打印归档 | 通过 `OrderPrintSheet.vue` + `@media print` 实现入库单/出库单/调拨单的浏览器打印，无需额外插件 |
-| 首页待办提醒 | 首页增加「低库存物料」「临期批次」两张清单，点击可直接跳转处理 |
-| 库存多维看板 | 库存查询支持明细、按物料汇总、按仓库汇总三个维度切换 |
-
-**本系统优于其开源实现的地方（答辩要点）**
-
-| 对比维度 | 若依 WMS | 本系统 |
-| --- | --- | --- |
 | 单据审核 | 仅暂存/作废/完成，无审核环节 | 草稿→待审核→已过账/已驳回，具备审批控制 |
 | 批次与效期 | lite 分支无批次与效期管理 | 库存按批次维度记录，支持有效期与临期预警 |
 | 并发控制 | `selectOne` 后批量更新，先查后改存在超卖风险 | 扣减走 `quantity >= 扣减量` 条件更新，失败即回滚 |
